@@ -10,19 +10,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_02_235718) do
+ActiveRecord::Schema.define(version: 2019_12_03_235827) do
 
   create_table "genres", force: :cascade do |t|
-    t.string "genre"
+    t.string "name"
+  end
+
+  create_table "movie_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "movie_id"
+    t.float "user_star_rating"
+    t.index ["movie_id"], name: "index_movie_users_on_movie_id"
+    t.index ["user_id"], name: "index_movie_users_on_user_id"
   end
 
   create_table "movies", force: :cascade do |t|
     t.string "name"
-    t.string "genre"
+    t.integer "genre_id"
+    t.string "rating"
+    t.integer "year"
+    t.string "cast"
+    t.float "star_rating"
+    t.index ["genre_id"], name: "index_movies_on_genre_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
+    t.string "username"
   end
 
+  add_foreign_key "movie_users", "movies"
+  add_foreign_key "movie_users", "users"
+  add_foreign_key "movies", "genres"
 end
