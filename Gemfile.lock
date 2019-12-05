@@ -67,6 +67,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 6.0)
   colorize
+  pastel
   pry (~> 0.12.2)
   rake (~> 13.0)
   require_all (~> 3.0)
