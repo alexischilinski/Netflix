@@ -6,7 +6,9 @@ class Cli
     end
 
     def start
-        puts "Welcome to Movie Finder!"
+        font = TTY::Font.new(:starwars)
+        puts "Welcome to.."
+        puts font.write("Movie Finder!")
         get_username
     end
 
@@ -175,32 +177,39 @@ class Cli
             movie_attributes(@movie_instance)
         elsif movie_attribute == "Go to Main Menu"
             menu
-        # elsif movie_attribute == "Go back to previous menu"
-        #     if @selection == "Horror"
-        #         horror
-        #     elsif @selection == "Comedy"
-        #         comedy 
-        #     elsif @selection == "Documentary"
-        #         documentary
-        #     elsif @selection == "Horror"
-        #         horror
-        #     end
+        elsif movie_attribute == "Go back to previous menu"
+            if @movie_instance.genre.name == "Action"
+                action
+            elsif @movie_instance.genre.name == "Comedy"
+                comedy 
+            elsif @movie_instance.genre.name == "Documentary"
+                documentary
+            elsif @movie_instance.genre.name == "Horror"
+                horror
+            end
         elsif movie_attribute == "Exit Movie Finder"
             exit
         end
+    end
+
+    def the_office
+        puts "Well, well, well. How the turntables."
+        exit
     end
 
     def add_to_watchlist
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
             puts "This movie is now in your watchlist."
-            # prompt = TTY::Prompt.new
-            # yesorno = prompt.select("Would you like to return to the main menu or exit?", ["Main menu", "Exit"])
-            #     if yesorno == "Main menu"
-            #         menu
-            #     else
-            #         exit
-            #     end
+            prompt = TTY::Prompt.new
+            yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?", ["Main menu", "View watchlist", "Exit"])
+                if yesorno == "Main menu"
+                    menu
+                elsif yesorno == "View watchlist"
+                    view_all_movies
+                elsif yesorno == "Exit"
+                    exit
+                end
         else
             puts "This movie has already been added to your watchlist."
             movie_attributes(@movie_instance)
