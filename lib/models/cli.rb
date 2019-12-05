@@ -35,7 +35,7 @@ class Cli
 
     def get_username
         puts "First, what is your full name?"
-        if @user_full_name = gets.chomp
+        if @user_full_name = gets.chomp.downcase
               @first_name = @user_full_name.split(' ')[0]
                 if !User.exists?(name: @user_full_name)
                     self.user = User.create(name: @user_full_name)
@@ -62,7 +62,7 @@ class Cli
     end
 
     def view_all_movies
-        if !MovieUser.all.include?(name: @user_full_name)
+        if !MovieUser.all.exists?(user: user)
             puts "You don't have any movies in your watchlist yet."
         else
             self.user.movies.each do |movie|
@@ -74,18 +74,18 @@ class Cli
 
     def select_genre
         prompt = TTY::Prompt.new
-        @selection = prompt.select("What genre are you most interested in right now?", ["Action", "Comedy", "Documentary", "Horror", "Go back to previous menu", "Exit Movie Finder"])
-        if @selection == "Go back to previous menu"
+        selection = prompt.select("What genre are you most interested in right now?", ["Action", "Comedy", "Documentary", "Horror", "Go back to previous menu", "Exit Movie Finder"])
+        if selection == "Go back to previous menu"
             menu
-        elsif @selection == "Action"
+        elsif selection == "Action"
             action
-        elsif @selection == "Comedy"
+        elsif selection == "Comedy"
             comedy
-        elsif @selection == "Documentary"
+        elsif selection == "Documentary"
             documentary
-        elsif @selection == "Horror"
+        elsif selection == "Horror"
             horror
-        elsif @selection == "Exit Movie Finder"
+        elsif selection == "Exit Movie Finder"
             exit
         end
     end
@@ -157,7 +157,7 @@ class Cli
 
     def movie_attributes(movie)
         prompt = TTY::Prompt.new
-        movie_attribute = prompt.select("Choose to view specific info about this movie or add it to your watchlist:", ["Release year", "Cast", "MPA rating", "IMDB rating out of 10", "Add to watchlist", "Go back to previous menu", "Exit Movie Finder"])
+        movie_attribute = prompt.select("Choose to view specific info about this movie or add it to your watchlist:", ["Release year", "Cast", "MPA rating", "IMDB rating out of 10", "Add to watchlist", "Go back to previous menu", "Go to Main Menu", "Exit Movie Finder"])
         if movie_attribute == "Release year"
             get_attribute("year")
             movie_attributes(@movie_instance)
@@ -173,6 +173,8 @@ class Cli
         elsif movie_attribute == "Add to watchlist"
             add_to_watchlist
             movie_attributes(@movie_instance)
+        elsif movie_attribute == "Go to Main Menu"
+            menu
         # elsif movie_attribute == "Go back to previous menu"
         #     if @selection == "Horror"
         #         horror
@@ -188,27 +190,21 @@ class Cli
         end
     end
 
-
     def add_to_watchlist
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
-            view_all_movies
             puts "This movie is now in your watchlist."
-            prompt = TTY::Prompt.new
-            yesorno = prompt.select("Would you like to return to the main menu or exit?", ["Main menu", "Exit"])
-                if yesorno == "Main menu"
-                    menu
-                else
-                    exit
-                end
+            # prompt = TTY::Prompt.new
+            # yesorno = prompt.select("Would you like to return to the main menu or exit?", ["Main menu", "Exit"])
+            #     if yesorno == "Main menu"
+            #         menu
+            #     else
+            #         exit
+            #     end
         else
             puts "This movie has already been added to your watchlist."
             movie_attributes(@movie_instance)
         end
-    end
-
-    def exit_method
-        exit
     end
 
 end
