@@ -8,3 +8,5 @@ require 'pry'
 require 'require_all'
 
 require_all 'lib'
+
+ActiveRecord::Base.logger = nil

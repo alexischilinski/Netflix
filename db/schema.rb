@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 2019_12_03_235827) do
   create_table "movie_users", force: :cascade do |t|
     t.integer "user_id"
     t.integer "movie_id"
-    t.float "user_star_rating"
     t.index ["movie_id"], name: "index_movie_users_on_movie_id"
     t.index ["user_id"], name: "index_movie_users_on_user_id"
   end

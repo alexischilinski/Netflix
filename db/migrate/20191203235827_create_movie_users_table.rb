@@ -3,7 +3,6 @@ class CreateMovieUsersTable < ActiveRecord::Migration[6.0]
     create_table :movie_users do |t|
       t.references :user, foreign_key: true
       t.references :movie, foreign_key: true
-      t.float :user_star_rating
     end
   end
 end
