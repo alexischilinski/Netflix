@@ -68,7 +68,7 @@ class Cli
             puts "You don't have any movies in your watchlist yet."
         else
             self.user.movies.each do |movie|
-            puts movie.name
+            puts movie.name.colorize(:red)
             end
         end
         menu
@@ -151,7 +151,7 @@ class Cli
     def get_attribute(attribute)
         Movie.all.find do |movie|
             if movie.name == "#{@movie_selection}"
-                puts movie[attribute]
+                puts movie[attribute].to_s.colorize(:yellow)
             end
         end
         movie_attributes(@movie_instance)
@@ -208,11 +208,23 @@ class Cli
                 elsif yesorno == "View watchlist"
                     view_all_movies
                 elsif yesorno == "Exit"
-                    exit
+                    exit_method
                 end
         else
             puts "This movie has already been added to your watchlist."
             movie_attributes(@movie_instance)
+        end
+    end
+
+    def exit_method
+        prompt = TTY::Prompt.new
+        exit_selection = prompt.select("Are you sure you want to exit?", ["No, take me back to the main menu", "Yes, I'm going to watch one of the movies in my watchlist!", "Yes but screw this, I'm just gonna watch The Office"])
+        if exit_selection == "No, take me back to the main menu"
+            menu
+        elsif exit_selection == "Yes, I'm going to watch one of the movies in my watchlist!"
+            exit
+        elsif exit_selection == "Yes but screw this, I'm just gonna watch The Office"
+            the_office
         end
     end
 
