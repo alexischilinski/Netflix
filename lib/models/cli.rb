@@ -56,11 +56,14 @@ class Cli
 
     def menu
         prompt = TTY::Prompt.new
-        menu_selection = prompt.select("Choose what you'd like to do next:".colorize(:light_blue), ["Find a movie", "View my watchlist", "Exit Movie Finder"])
+        menu_selection = prompt.select("Choose what you'd like to do next:".colorize(:light_blue), ["Find a movie", "View my watchlist", "Delete movie from watchlist", "Exit Movie Finder"])
             if menu_selection == "Find a movie"
                 select_genre
             elsif menu_selection == "View my watchlist"
                 view_all_movies
+            elsif menu_selection == "Delete movie from watchlist"
+                delete_from_watchlist
+                #menu
             elsif menu_selection == "Exit Movie Finder"
                 exit
             end
@@ -70,6 +73,7 @@ class Cli
         if !MovieUser.all.exists?(user: user)
             puts "You don't have any movies in your watchlist yet.".colorize(:light_blue)
         else
+            self.user.reload
             self.user.movies.each do |movie|
             puts movie.name.colorize(:red)
             end
@@ -209,6 +213,7 @@ class Cli
     def add_to_watchlist
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
+            #MovieUser.update
             puts "This movie is now in your watchlist.".colorize(:light_blue)
             prompt = TTY::Prompt.new
             yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?".colorize(:light_blue), ["Main menu", "View watchlist", "Exit"])
@@ -225,10 +230,34 @@ class Cli
         end
     end
 
+    def delete_list 
+        self.user.movies.map{|movie| "#{movie.name}"}
+    end
+
+    def delete_from_watchlist
+        prompt = TTY::Prompt.new
+        @delete_selection = prompt.select("Choose which movie you'd like to remove from your watchlist:".colorize(:light_blue), delete_list)
+        @delete_instance = Movie.all.find{|movie| movie.name == @delete_selection}
+        instance = MovieUser.where(user: user, movie: @delete_instance).ids
+        MovieUser.destroy(instance)
+        prompt = TTY::Prompt.new
+        yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?".colorize(:light_blue), ["Main menu", "View watchlist", "Exit"])
+            if yesorno == "Main menu"
+                menu
+            elsif yesorno == "View watchlist"
+                view_all_movies
+            elsif yesorno == "Exit"
+                exit_method
+            end
+        #view_all_movies.reload
+        sleep(2)
+        menu
+    end
+
     def exit_method
         prompt = TTY::Prompt.new
         exit_selection = prompt.select("Are you sure you want to exit?".colorize(:light_blue), ["No, take me back to the main menu", "Yes, I'm going to watch one of the movies in my watchlist!", "Yes but screw this, I'm just gonna watch The Office"])
-        if exit_selection == "No, take me back to the main menu"
+        if exit_selection == "No, take me back to the main menu" 
             menu
         elsif exit_selection == "Yes, I'm going to watch one of the movies in my watchlist!"
             exit
