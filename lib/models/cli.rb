@@ -71,7 +71,7 @@ class Cli
 
     def view_all_movies
         if !MovieUser.all.exists?(user: user)
-            puts "You don't have any movies in your watchlist yet.".colorize(:light_blue)
+            puts "You don't have any movies in your watchlist yet."
         else
             self.user.reload
             self.user.movies.each do |movie|
@@ -102,7 +102,7 @@ class Cli
 
     def action
         prompt = TTY::Prompt.new
-        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["Raiders of the Lost Ark", "Avengers: Infinity War", "Go back to previous menu", "Exit Movie Finder"])
+        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["Raiders of the Lost Ark", "Avengers: Infinity War", "The Matrix", "Solo", "Go back to previous menu", "Exit Movie Finder"])
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
@@ -111,12 +111,13 @@ class Cli
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
         end
+        sleep(2)
         movie_attributes(@movie_instance)
     end
 
     def comedy
         prompt = TTY::Prompt.new
-        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["Stepbrothers", "Get Smart", "Go back to previous menu", "Exit Movie Finder"])
+        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["Stepbrothers", "Get Smart", "John Mulaney: The Comeback Kid", "Hot Rod", "Go back to previous menu", "Exit Movie Finder"])
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
@@ -125,12 +126,13 @@ class Cli
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
         end
+        sleep(2)
         movie_attributes(@movie_instance)
     end
 
     def documentary
         prompt = TTY::Prompt.new
-        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["Fyre", "Minimalism", "Go back to previous menu", "Exit Movie Finder"])
+        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["Fyre", "Minimalism", "The Pixar Story", "Disneynature: Oceans", "Go back to previous menu", "Exit Movie Finder"])
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
@@ -139,20 +141,22 @@ class Cli
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
         end
+        sleep(2)
         movie_attributes(@movie_instance)
     end
 
     def horror
         prompt = TTY::Prompt.new
-        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["The Conjuring", "Insidious", "Go back to previous menu", "Exit Movie Finder"])
+        @movie_selection = prompt.select("Please select from the following movies:".colorize(:light_blue), ["The Conjuring", "Insidious", "Rosemary's Baby", "The Witch", "Go back to previous menu", "Exit Movie Finder"])
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
             exit
         else
-            puts "You've selected #{@movie_selection}!".colorize(:light_blue)
+            puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
         end
+        sleep(2)
         movie_attributes(@movie_instance)
     end
 
@@ -162,6 +166,7 @@ class Cli
                 puts movie[attribute].to_s.colorize(:yellow)
             end
         end
+        sleep(2)
         movie_attributes(@movie_instance)
     end
 
@@ -170,19 +175,15 @@ class Cli
         movie_attribute = prompt.select("Choose to view specific info about #{@movie_selection} or add it to your watchlist:".colorize(:light_blue), ["Release year", "Cast", "MPA rating", "IMDB rating out of 10", "Add to watchlist", "Go back to previous menu", "Go to Main Menu", "Exit Movie Finder"])
         if movie_attribute == "Release year"
             get_attribute("year")
-            sleep(1)
             movie_attributes(@movie_instance)
         elsif movie_attribute == "Cast"
             get_attribute("cast")
-            sleep(1)
             movie_attributes(@movie_instance)
         elsif movie_attribute == "MPA rating"
             get_attribute("rating")
-            sleep(1)
             movie_attributes(@movie_instance)
         elsif movie_attribute == "IMDB rating out of 10"
             get_attribute("star_rating")
-            sleep(1)
             movie_attributes(@movie_instance)
         elsif movie_attribute == "Add to watchlist"
             add_to_watchlist
@@ -205,7 +206,10 @@ class Cli
     end
 
     def the_office
-        puts "Well, well, well. How the turntables.".colorize(:light_blue)
+        font = TTY::Font.new(:standard)
+        puts font.write("well, well, well..")
+        sleep(3)
+        puts font.write("..how the turntables.")
         sleep(2)
         exit
     end
@@ -213,8 +217,7 @@ class Cli
     def add_to_watchlist
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
-            #MovieUser.update
-            puts "This movie is now in your watchlist.".colorize(:light_blue)
+            puts "This movie is now in your watchlist."
             prompt = TTY::Prompt.new
             yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?".colorize(:light_blue), ["Main menu", "View watchlist", "Exit"])
                 if yesorno == "Main menu"
@@ -225,7 +228,8 @@ class Cli
                     exit_method
                 end
         else
-            puts "This movie has already been added to your watchlist.".colorize(:light_blue)
+            puts "This movie has already been added to your watchlist."
+            sleep(2)
             movie_attributes(@movie_instance)
         end
     end
@@ -235,6 +239,11 @@ class Cli
     end
 
     def delete_from_watchlist
+        if !MovieUser.all.exists?(user: user)
+            puts "You don't have any movies in your watchlist."
+            sleep(2)
+            menu 
+        else
         prompt = TTY::Prompt.new
         @delete_selection = prompt.select("Choose which movie you'd like to remove from your watchlist:".colorize(:light_blue), delete_list)
         @delete_instance = Movie.all.find{|movie| movie.name == @delete_selection}
@@ -249,7 +258,7 @@ class Cli
             elsif yesorno == "Exit"
                 exit_method
             end
-        #view_all_movies.reload
+        end
         sleep(2)
         menu
     end
