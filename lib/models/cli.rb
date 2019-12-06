@@ -206,15 +206,6 @@ class Cli
         end
     end
 
-    def the_office
-        font = TTY::Font.new(:standard)
-        puts font.write("well, well, well..")
-        sleep(3)
-        puts font.write("..how the turntables.")
-        sleep(2)
-        exit
-    end
-
     def add_to_watchlist
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
@@ -274,6 +265,15 @@ class Cli
         elsif exit_selection == "Yes but screw this, I'm just gonna watch The Office"
             the_office
         end
+    end
+
+    def the_office
+        font = TTY::Font.new(:standard)
+        puts font.write("well, well, well..")
+        sleep(2)
+        puts font.write("..how the turntables.")
+        sleep(2)
+        exit
     end
 
 end

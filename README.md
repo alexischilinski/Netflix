@@ -8,12 +8,22 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites and Installing
 
-All of the gems are already in the Gemfile, so you only need to run this command
+This CLI was built with Ruby, Sqlite3, and Active Record. All of the gems are already in the Gemfile, so you only need to run this command
 
 ```
 bundle install
 ```
-in the terminal to add them.
+in the terminal to add them. Gems include:
+* pry
+* rake
+* activerecord
+* sinatra-activerecord
+* sqlite3
+* require_all
+* tty-prompt
+* tty-fonts
+* colorize
+* pastel
 
 ### Running the CLI
 
