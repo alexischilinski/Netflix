@@ -207,6 +207,7 @@ class Cli
     end
 
     def add_to_watchlist
+        self.user.reload
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
             puts "This movie is now in your watchlist."
@@ -220,7 +221,6 @@ class Cli
                     exit_method
                 end
         else
-            self.user.reload
             puts "This movie has already been added to your watchlist."
             sleep(2)
             movie_attributes(@movie_instance)
