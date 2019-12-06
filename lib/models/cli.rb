@@ -10,6 +10,7 @@ class Cli
         font = TTY::Font.new(:starwars)
         pastel = Pastel.new
         puts "Welcome to..".colorize(:green)
+        sleep(2)
         puts pastel.yellow(font.write("Movie Finder!"))
         sleep(2)
         get_username
