@@ -66,7 +66,7 @@ class Cli
                 delete_from_watchlist
                 #menu
             elsif menu_selection == "Exit Movie Finder"
-                exit
+                stop_song
             end
     end
 
@@ -97,7 +97,7 @@ class Cli
         elsif selection == "Horror"
             horror
         elsif selection == "Exit Movie Finder"
-            exit
+            stop_song
         end
     end
 
@@ -107,7 +107,7 @@ class Cli
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
-            exit
+            stop_song
         else
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
@@ -122,7 +122,7 @@ class Cli
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
-            exit
+            stop_song
         else
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
@@ -137,7 +137,7 @@ class Cli
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
-            exit
+            stop_song
         else
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
@@ -152,7 +152,7 @@ class Cli
         if @movie_selection == "Go back to previous menu"
             select_genre
         elsif @movie_selection == "Exit Movie Finder"
-            exit
+            stop_song
         else
             puts "You've selected #{@movie_selection}!"
             @movie_instance = Movie.all.find{|movie| movie.name == "#{@movie_selection}"}
@@ -202,7 +202,7 @@ class Cli
                 horror
             end
         elsif movie_attribute == "Exit Movie Finder"
-            exit
+            stop_song
         end
     end
 
@@ -265,10 +265,15 @@ class Cli
         if exit_selection == "No, take me back to the main menu" 
             menu
         elsif exit_selection == "Yes, I'm going to watch one of the movies in my watchlist!"
-            exit
+            stop_song
         elsif exit_selection == "Yes but screw this, I'm just gonna watch The Office"
             the_office
         end
+    end
+
+    def stop_song
+        pid = fork{exec 'killall', "afplay"}
+        exit
     end
 
     def the_office
@@ -277,7 +282,7 @@ class Cli
         sleep(2)
         puts font.write("..how the turntables.")
         sleep(2)
-        exit
+        stop_song
     end
 
 end
