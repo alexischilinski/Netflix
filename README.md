@@ -52,4 +52,4 @@ You will be able to choose a username, find a movie and see various information 
 
 ## Acknowledgments
 
-* Thanks Jessie! :)
+* Thanks Jesse! :)
