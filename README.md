@@ -37,6 +37,9 @@ in the terminal and follow the prompts!
 
 You will be able to choose a username, find a movie and see various information about the movie and add it to your watchlist. You can also delete movies from your watchlist.
 
+* [Video](https://www.youtube.com/watch?v=4n9zBiafrec&feature=youtu.be) - video demo with existing user
+* [Video](https://www.youtube.com/watch?v=P_m9tMBdsAg&feature=youtu.be) - video demo with new user
+
 ## Built With
 
 * [TTYToolkit](https://ttytoolkit.org/components/) - tty-prompt gem, tty-fonts
