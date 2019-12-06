@@ -23,7 +23,7 @@ class Cli
             puts "Sorry that username has been taken.".colorize(:light_blue)
             create_username
         else 
-            user.update_attributes(username: user_name)
+            user.update(username: user_name)
         end       
     end
 
@@ -210,7 +210,7 @@ class Cli
         self.user.reload
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
-            puts "This movie is now in your watchlist."
+            puts "#{@movie_selection} is now in your watchlist."
             prompt = TTY::Prompt.new
             yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?".colorize(:light_blue), ["Main menu", "View watchlist", "Exit"])
                 if yesorno == "Main menu"
@@ -242,6 +242,8 @@ class Cli
         @delete_instance = Movie.all.find{|movie| movie.name == @delete_selection}
         instance = MovieUser.where(user: user, movie: @delete_instance).ids
         MovieUser.destroy(instance)
+        puts "#{@delete_selection} has been deleted from your watchlist."
+        sleep(2)
         prompt = TTY::Prompt.new
         yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?".colorize(:light_blue), ["Main menu", "View watchlist", "Exit"])
             if yesorno == "Main menu"
