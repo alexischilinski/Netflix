@@ -220,6 +220,7 @@ class Cli
                     exit_method
                 end
         else
+            self.user.reload
             puts "This movie has already been added to your watchlist."
             sleep(2)
             movie_attributes(@movie_instance)
