@@ -211,6 +211,7 @@ class Cli
         if !user.movies.include?(@movie_instance)
             MovieUser.create(user: user, movie: @movie_instance)
             puts "#{@movie_selection} is now in your watchlist."
+            sleep(2)
             prompt = TTY::Prompt.new
             yesorno = prompt.select("Would you like to return to the main menu, view your watchlist, or exit?".colorize(:light_blue), ["Main menu", "View watchlist", "Exit"])
                 if yesorno == "Main menu"
